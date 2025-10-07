@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT Mock Test Performance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>CAT Mock Test Performance Tracker</h1>
+                <p>Track your progress towards CAT success</p>
+            </div>
+            
+            <div class="login-card">
+                <h2>Login to Your Account</h2>
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label class="form-label" for="userId">User ID</label>
+                        <input type="text" id="userId" name="userId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <div id="login-error" class="error-message hidden"></div>
+                    <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                </form>
+                
+                <div class="login-demo">
+                    <h3>Demo Accounts</h3>
+                    <div class="demo-accounts">
+                        <div class="demo-account">
+                            <strong>Admin:</strong> admin / admin123
+                        </div>
+                        <div class="demo-account">
+                            <strong>Student:</strong> student1 / pass123
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="main-app hidden">
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="header-info">
+                        <h1 class="header-title">CAT Performance Tracker</h1>
+                        <p class="header-user">Welcome, <span id="user-name"></span></p>
+                    </div>
+                    <div class="header-actions">
+                        <span class="user-role" id="user-role-badge"></span>
+                        <button class="btn btn--outline" id="logout-btn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="container">
+                <!-- Student Navigation -->
+                <nav id="student-nav" class="tab-nav hidden">
+                    <button class="tab-btn active" data-tab="student-dashboard">Dashboard</button>
+                    <button class="tab-btn" data-tab="form">Add Test</button>
+                    <button class="tab-btn" data-tab="records">My Tests</button>
+                    <button class="tab-btn" data-tab="analytics">Analytics</button>
+                    <button class="tab-btn" data-tab="profile">Profile</button>
+                </nav>
+
+                <!-- Admin Navigation -->
+                <nav id="admin-nav" class="tab-nav hidden">
+                    <button class="tab-btn active" data-tab="admin-dashboard">Dashboard</button>
+                    <button class="tab-btn" data-tab="user-management">User Management</button>
+                    <button class="tab-btn" data-tab="all-students">All Students Data</button>
+                    <button class="tab-btn" data-tab="admin-analytics">Analytics</button>
+                </nav>
+
+                <!-- Student Dashboard -->
+                <section id="student-dashboard-section" class="section">
+                    <div class="dashboard-grid">
+                        <div class="card stats-card">
+                            <div class="card__header">
+                                <h3>My Performance Overview</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="stats-grid" id="student-stats-grid">
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="student-total-tests">0</div>
+                                        <div class="stat-label">Total Tests</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="student-avg-score">--</div>
+                                        <div class="stat-label">Avg Score</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="student-best-percentile">--</div>
+                                        <div class="stat-label">Best Percentile</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="student-improvement">--</div>
+                                        <div class="stat-label">Improvement</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Recent Tests</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="recent-tests-list"></div>
+                                <button class="btn btn--primary mt-16" onclick="switchTab('form')">Add New Test</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Admin Dashboard -->
+                <section id="admin-dashboard-section" class="section">
+                    <div class="admin-dashboard-grid">
+                        <div class="card stats-card">
+                            <div class="card__header">
+                                <h3>System Overview</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="total-students">0</div>
+                                        <div class="stat-label">Total Students</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="total-all-tests">0</div>
+                                        <div class="stat-label">All Tests</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="avg-class-score">--</div>
+                                        <div class="stat-label">Class Average</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="top-performer">--</div>
+                                        <div class="stat-label">Top Performer</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Quick Actions</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="quick-actions">
+                                    <button class="btn btn--primary" onclick="switchTab('user-management')">Add Student</button>
+                                    <button class="btn btn--outline" onclick="switchTab('all-students')">View All Data</button>
+                                    <button class="btn btn--outline" id="admin-export-all">Export All Data</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- User Management Section (Admin Only) -->
+                <section id="user-management-section" class="section">
+                    <div class="card">
+                        <div class="card__header">
+                            <h2>User Management</h2>
+                            <p class="text-secondary">Add and manage student accounts</p>
+                        </div>
+                        <div class="card__body">
+                            <form id="add-user-form" class="user-form">
+                                <h3>Add New Student</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="newUserId">User ID</label>
+                                        <input type="text" id="newUserId" name="newUserId" class="form-control" required>
+                                        <small class="form-text">Must be unique</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="newPassword">Password</label>
+                                        <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="newName">Full Name</label>
+                                        <input type="text" id="newName" name="newName" class="form-control" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn--primary">Add Student</button>
+                            </form>
+
+                            <div class="users-list">
+                                <h3>Existing Students</h3>
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>User ID</th>
+                                                <th>Full Name</th>
+                                                <th>Created Date</th>
+                                                <th>Total Tests</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="users-table-body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- All Students Data Section (Admin Only) -->
+                <section id="all-students-section" class="section">
+                    <div class="card">
+                        <div class="card__header">
+                            <div class="section-header">
+                                <div>
+                                    <h2>All Students Data</h2>
+                                    <p class="text-secondary">View and manage all mock test records</p>
+                                </div>
+                                <div class="section-actions">
+                                    <select id="student-filter" class="form-control">
+                                        <option value="">All Students</option>
+                                    </select>
+                                    <input type="text" id="admin-search-input" class="form-control search-input" placeholder="Search tests...">
+                                    <button class="btn btn--outline" id="admin-export-filtered">Export Filtered</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card__body">
+                            <div id="admin-empty-state" class="empty-state">
+                                <div class="empty-state-icon">📊</div>
+                                <h3>No test records found</h3>
+                                <p>Students haven't added any test records yet</p>
+                            </div>
+                            <div id="admin-records-table-container" class="table-container hidden">
+                                <table id="admin-records-table" class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Student</th>
+                                            <th data-sort="mockName">Mock Test</th>
+                                            <th data-sort="testDate">Date</th>
+                                            <th data-sort="totalScore">Total Score</th>
+                                            <th data-sort="overallPercentile">Overall %ile</th>
+                                            <th data-sort="accuracy">Accuracy</th>
+                                            <th>Sections</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-records-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Add Mock Test Form -->
+                <section id="form-section" class="section">
+                    <div class="card">
+                        <div class="card__header">
+                            <h2>Add New Mock Test Result</h2>
+                            <p class="text-secondary">Enter your mock test performance details</p>
+                        </div>
+                        <div class="card__body">
+                            <form id="mock-form" class="mock-form">
+                                <!-- Basic Information -->
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="mockName">Mock Test Name *</label>
+                                        <input type="text" id="mockName" name="mockName" class="form-control" required>
+                                        <small class="form-text">e.g., TIME Mock Test 1, IMS Mock 5</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="testDate">Test Date *</label>
+                                        <input type="date" id="testDate" name="testDate" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <!-- Overall Performance -->
+                                <div class="form-section">
+                                    <h3 class="form-section-title">Overall Performance</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="totalScore">Total Score *</label>
+                                            <input type="number" id="totalScore" name="totalScore" class="form-control" min="0" max="204" step="0.01" required>
+                                            <small class="form-text">Range: 0-204</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="overallPercentile">Overall Percentile *</label>
+                                            <input type="number" id="overallPercentile" name="overallPercentile" class="form-control" min="0" max="100" step="0.01" required>
+                                            <small class="form-text">Range: 0-100</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="negativeMarks">Negative Marks *</label>
+                                            <input type="number" id="negativeMarks" name="negativeMarks" class="form-control" min="0" step="0.25" required>
+                                            <small class="form-text">Minimum: 0</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="accuracy">Accuracy % *</label>
+                                            <input type="number" id="accuracy" name="accuracy" class="form-control" min="0" max="100" step="0.01" required>
+                                            <small class="form-text">Range: 0-100</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- VARC Section -->
+                                <div class="form-section">
+                                    <h3 class="form-section-title">VARC Section</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="varcMarks">VARC Marks *</label>
+                                            <input type="number" id="varcMarks" name="varcMarks" class="form-control" min="0" max="72" step="0.01" required>
+                                            <small class="form-text">Range: 0-72</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="varcPercentile">VARC Percentile *</label>
+                                            <input type="number" id="varcPercentile" name="varcPercentile" class="form-control" min="0" max="100" step="0.01" required>
+                                            <small class="form-text">Range: 0-100</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- LRDI Section -->
+                                <div class="form-section">
+                                    <h3 class="form-section-title">LRDI Section</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="lrdiMarks">LRDI Marks *</label>
+                                            <input type="number" id="lrdiMarks" name="lrdiMarks" class="form-control" min="0" max="66" step="0.01" required>
+                                            <small class="form-text">Range: 0-66</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="lrdiPercentile">LRDI Percentile *</label>
+                                            <input type="number" id="lrdiPercentile" name="lrdiPercentile" class="form-control" min="0" max="100" step="0.01" required>
+                                            <small class="form-text">Range: 0-100</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- QA Section -->
+                                <div class="form-section">
+                                    <h3 class="form-section-title">QA Section</h3>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="qaMarks">QA Marks *</label>
+                                            <input type="number" id="qaMarks" name="qaMarks" class="form-control" min="0" max="66" step="0.01" required>
+                                            <small class="form-text">Range: 0-66</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="qaPercentile">QA Percentile *</label>
+                                            <input type="number" id="qaPercentile" name="qaPercentile" class="form-control" min="0" max="100" step="0.01" required>
+                                            <small class="form-text">Range: 0-100</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn--primary" id="submit-btn">
+                                        <span class="btn-text">Add Mock Test</span>
+                                        <span class="btn-spinner hidden">Adding...</span>
+                                    </button>
+                                    <button type="button" class="btn btn--secondary" id="reset-btn">Clear Form</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Test Records Section -->
+                <section id="records-section" class="section">
+                    <div class="card">
+                        <div class="card__header">
+                            <div class="section-header">
+                                <div>
+                                    <h2>My Test Records</h2>
+                                    <p class="text-secondary">View and manage your test history</p>
+                                </div>
+                                <div class="section-actions">
+                                    <input type="text" id="search-input" class="form-control search-input" placeholder="Search mock tests...">
+                                    <button class="btn btn--outline" id="export-csv">Export CSV</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card__body">
+                            <div id="empty-state" class="empty-state">
+                                <div class="empty-state-icon">📊</div>
+                                <h3>No mock tests recorded yet</h3>
+                                <p>Add your first mock test result to start tracking your progress</p>
+                                <button class="btn btn--primary" onclick="switchTab('form')">Add Mock Test</button>
+                            </div>
+                            <div id="records-table-container" class="table-container hidden">
+                                <table id="records-table" class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-sort="mockName">Mock Test</th>
+                                            <th data-sort="testDate">Date</th>
+                                            <th data-sort="totalScore">Total Score</th>
+                                            <th data-sort="overallPercentile">Overall %ile</th>
+                                            <th data-sort="accuracy">Accuracy</th>
+                                            <th data-sort="varcMarks">VARC</th>
+                                            <th data-sort="lrdiMarks">LRDI</th>
+                                            <th data-sort="qaMarks">QA</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="records-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analytics Section -->
+                <section id="analytics-section" class="section">
+                    <div class="analytics-grid">
+                        <!-- Key Statistics -->
+                        <div class="card stats-card">
+                            <div class="card__header">
+                                <h3>Key Statistics</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="stats-grid" id="stats-grid">
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="total-tests">0</div>
+                                        <div class="stat-label">Total Tests</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="avg-score">--</div>
+                                        <div class="stat-label">Avg Score</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="best-percentile">--</div>
+                                        <div class="stat-label">Best Percentile</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value" id="avg-accuracy">--</div>
+                                        <div class="stat-label">Avg Accuracy</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Trends -->
+                        <div class="card chart-card">
+                            <div class="card__header">
+                                <h3>Performance Trends</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="trends-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section Performance -->
+                        <div class="card chart-card">
+                            <div class="card__header">
+                                <h3>Section-wise Performance</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="sections-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Insights -->
+                        <div class="card insights-card">
+                            <div class="card__header">
+                                <h3>Performance Insights</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="insights-container">
+                                    <div class="insight-item">
+                                        <div class="insight-icon">💡</div>
+                                        <div class="insight-text">Take more mock tests to see personalized insights</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Admin Analytics Section -->
+                <section id="admin-analytics-section" class="section">
+                    <div class="analytics-grid">
+                        <div class="card chart-card">
+                            <div class="card__header">
+                                <h3>Class Performance Overview</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="chart-container" style="position: relative; height: 300px;">
+                                    <canvas id="admin-class-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Top Performers</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="top-performers-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section (Student Only) -->
+                <section id="profile-section" class="section">
+                    <div class="card">
+                        <div class="card__header">
+                            <h2>My Profile</h2>
+                            <p class="text-secondary">View and manage your account information</p>
+                        </div>
+                        <div class="card__body">
+                            <div class="profile-info">
+                                <div class="profile-item">
+                                    <label>Full Name:</label>
+                                    <span id="profile-name"></span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>User ID:</label>
+                                    <span id="profile-user-id"></span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Account Created:</label>
+                                    <span id="profile-created-date"></span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Total Tests:</label>
+                                    <span id="profile-total-tests"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <span class="toast-icon">✅</span>
+            <span class="toast-message">Operation completed successfully!</span>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete this record? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn--secondary" id="cancel-delete">Cancel</button>
+                <button class="btn btn--primary" id="confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
