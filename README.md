@@ -1,122 +1,104 @@
-CAT Mock Test Performance Tracker
-A web-based application for CAT aspirants and administrators to manage, analyze, and track mock test performance. The project supports individual student login, secure authentication, simulated Google Sheets export, and advanced admin capabilities.
+# 🎯 CAT Mock Test Performance Tracker
 
-Features
-For Students
-Secure login via User ID and Password
+Welcome to the CAT Mock Test Performance Tracker — an intuitive web app designed *for students* to simplify the organization and analysis of CAT mock test results, maximize your preparation, and visualize your progress!
 
-Add, view, and delete personal mock test records
+---
 
-Real-time performance analytics and charts
+## ✨ Features at a Glance
 
-Section-wise performance breakdown (VARC, LRDI, QA)
+- **🔒 Student Login** — Secure, individual access with User ID and Password  
+- **📝 Add Test Records** — Store your mock test scores, section-wise details, accuracy & percentiles  
+- **📊 Visual Analytics** — Instantly track your progress with charts and performance summaries  
+- **🔎 Review & Sort** — Easily view, sort, and filter your historical records  
+- **📤 Export Data** — One-click export to CSV for upload to Google Sheets  
+- **☁️ Fully Browser-based** — No install, just open in your preferred browser!
 
-CSV/Sheets data export for personal results
+---
 
-User profile and statistics dashboard
+## 👨‍🎓 Student Demo Accounts
 
-For Admin
-Admin login access with full system permissions
+> Use these demo accounts to explore all features. Case sensitive.
 
-Add, edit, delete, and reset student user accounts
+| User ID   | Password   | Full Name      |
+|:----------|:-----------|:--------------|
+| student1  | pass123    | Rahul Sharma   |
+| student2  | pass456    | Priya Patel    |
+| student3  | pass789    | Amit Kumar     |
 
-View & analyze mock results for all students
+---
 
-Class-wide analytics and top performer dashboard
+## 🚀 Quick Start
 
-Export collective data for further analysis or backup
+**1. Download & Unpack  
+2. Open `index.html` in your browser  
+3. Login with any student demo account  
+4. Start adding, viewing, and analyzing your mock test results**
 
-Debugging console/data monitoring for system integrity
+---
 
-Technical Highlights
-Role-based authentication (student/admin)
+## 🖥️ Screenshots
 
-Robust login form validation and user feedback
+> *Modern, clean and responsive design for all devices!*
 
-Data persistence in localStorage (can be swapped with backend API)
+- **Login Page:**  
+  ![](assets/demo-login.png)
 
-Responsive design for mobile, tablet, and desktop screens
+- **Student Dashboard:**  
+  ![](assets/demo-dashboard.png)
 
-Modern UI using HTML, CSS, and vanilla JavaScript
+- **Add Test Record:**  
+  ![](assets/demo-form.png)
 
-Built-in debug/testing mode and system health dashboard
+- **Analytics & Charts:**  
+  ![](assets/demo-analytics.png)
 
-Quick Start
-Get started by opening index.html in any modern web browser (Chrome, Firefox, Edge, Safari).
+---
 
-Demo Credentials
-Role	User ID	Password	Name
-Admin	admin	admin123	Administrator
-Student	student1	pass123	Rahul Sharma
-Student	student2	pass456	Priya Patel
-Student	student3	pass789	Amit Kumar
-Installation
-No installation required for the single-page version. Copy all files into a folder and open index.html in your browser.
+## 📚 How To Use
 
-For deployment on a static host:
+### ➡️ Logging In  
+- Navigate to the login page and enter your provided credentials.  
+- Upon successful login, access your personal dashboard.
 
-Copy index.html, style.css, app.js and supporting assets
+### ➡️ Add New Mock Test  
+- Click "Add New Test"
+- Fill in test name, date, total and section-wise scores & percentiles, negatives, and accuracy.
+- Submit — your record is instantly saved and shown in your table.
 
-Host files using GitHub Pages, Netlify, Vercel, or similar static hosts
+### ➡️ Analyze & Export  
+- Review overall and section-wise trends in charts  
+- Download your complete data as CSV for backup or Google Sheets analysis
 
-Project Structure
-text
-CAT-MockTest-Tracker/
-│
-├── index.html           # Main application UI
-├── style.css            # Stylesheet for all UI components
-├── app.js               # Frontend logic, authentication, and analytics
-├── README.md            # Documentation and usage guide
+### ➡️ Manage Your History  
+- Sort and filter by score, date, percentile  
+- Remove records if needed  
+- All data is secured to your individual login!
 
-Usage Guide
-1. Authentication
-Login Screen: Enter your User ID and Password. The app validates credentials and redirects to dashboard based on role.
+---
 
-Admin Access: See system overview, manage student users, and view all test data.
+## ⚙️ Technical Details
 
-Student Access: Manage only your own mock test records and personal analytics.
+- **Front-end Only:** Written in HTML, CSS, and vanilla JavaScript  
+- **Data Storage:** Uses secure local browser storage – no server required  
+- **Device Use:** Desktop, tablet, or mobile supported  
+- **Export:** CSV download format matches Google Sheets import standards
 
-2. Student Dashboard
-Add Test: Fill in mock name, scores, section marks, percentiles, negative marks, accuracy, and test date.
+---
 
-View Records: See and sort your own history.
+## ❓ FAQ
 
-Analytics: View percentile/score charts, progression, strengths/weaknesses.
+- **Q:** Is my data private?  
+  **A:** Yes, only visible to your login.
 
-3. Admin Dashboard
-User Management: Create new students, reset passwords, edit details, delete accounts.
+- **Q:** Can I import old data?  
+  **A:** Use the CSV template and upload in a browser with localStorage support.
 
-Student Data: View/test data for all students. Filter, search, and export results.
+- **Q:** Is there a mobile app?  
+  **A:** The site is fully responsive; pin to your home screen for app-like feel!
 
-Analytics: Compare performance across students, find top performers, view class averages.
+---
 
-4. Export & Debug
-CSV Export: Download your data for uploading to Google Sheets.
+*For any issues or feedback, please contact the project maintainer.*
 
-Debug Mode: View system information, session details, and localStorage status for troubleshooting.
+---
 
-Troubleshooting
-If facing login issues:
-
-Verify browser allows localStorage and JavaScript
-
-Use correct case for User ID and Password
-
-Use supported browsers only (Chrome, Firefox, Edge, Safari)
-
-See the built-in Debug Information tab for system status and diagnostics
-
-Extending/Deploying
-To deploy in production or integrate with a real backend:
-
-Replace localStorage with secure database/API
-
-Integrate Google Sheets via REST API or OAuth
-
-Add password hashing and advanced security logic for sensitive deployments
-
-License
-Open source for educational/non-commercial use. For production/commercial deployment, adapt security, user management, and persistence layers.
-
-Contact & Credits
-For queries and collaboration, contact project maintainer or open an issue in your code hosting repository. Original design and requirements by engineering education and CAT preparation domain experts.
